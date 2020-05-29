@@ -28,10 +28,15 @@
     dest: /etc/profile.d/rubygems.sh
     mode: 0644
 
-# Install Bundler and configured gems.
-- name: Install Bundler.
+# Install Bundler and configured gems for ubuntu 14.
+- name: Install Bundler ( ubuntu 14) 
   gem: name=bundler state=present user_install=no version=1.16.1
-  when: ruby_install_bundler
+  when: ruby_install_bundler and ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'trusty'
+
+# Install Bundler and configured gems for other distributions.
+- name: Install Bundler.
+  gem: name=bundler state=present user_install=no 
+  when: ruby_install_bundler and ansible_distribution_release != 'trusty'
 
 - name: Install configured gems.
   gem:
